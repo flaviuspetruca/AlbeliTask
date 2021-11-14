@@ -1,11 +1,11 @@
 const generateMatrix = () => {
 
     const matrixHTML = document.getElementById('matrix');
+    const btnValue   = document.getElementById('submitBtn').value;
+
     const x          = document.getElementById('x').value;
     const y          = document.getElementById('y').value;
     const colors     = document.getElementById("colors").value;
-    const btnValue   = document.getElementById('submitBtn').value;
-    let colorIndex   = 0;
 
     var colorArray = 
      ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
@@ -18,13 +18,13 @@ const generateMatrix = () => {
       '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
       '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
       '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
-
     
     if(x > 50 || y > 50){
         alert("Please choose a number smaller than 50 in order to display the board correctly!");
         return;
     }
 
+    //Removes previously generated matrix
     if(btnValue > 0){
         matrixHTML.removeChild(matrixHTML.lastChild);
     }
@@ -38,19 +38,20 @@ const generateMatrix = () => {
         return;
     }
 
+    let colorIndex   = 0;
+
     if(x === '' || y === '' || colors === ''){
         alert("Make sure you added all the values!");
         return;
     }else{
-        
         let matrix = document.createElement('table');
-        matrix.className = matrix;
 
+        //Generates rows for the board
         for(let i = 0 ; i < x ; i++){
 
             let tableRow = document.createElement('tr');
-            tableRow.className = 'tableRow'
 
+            //Appending colors to the row
             for(let j = 0 ; j < y ; j++){
                 let item = document.createElement('td');
                 item.style.background = colorArray[(colorIndex+j)%colors];
@@ -60,10 +61,8 @@ const generateMatrix = () => {
             colorIndex = colorIndex + 1;
             matrix.append(tableRow);
         }
+        
         matrixHTML.append(matrix);
         document.getElementById('submitBtn').setAttribute("value",1);
     }
 }
-document.getElementById("mainForm").addEventListener("click", function(event){
-    event.preventDefault()
-});
