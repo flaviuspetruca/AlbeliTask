@@ -4,28 +4,52 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>Albelli task</title>
 </head>
 <body>
-    <form id="mainForm">
-        <label for="x">BoardSize x:</label>
-        <input type="text" id="x"><br><br>
-        <label for="y">BoardSize y:</label>
-        <input type="text" id="y"><br><br>
-        <label for="colors">Number of colors:</label>
-        <input type="text" id="colors"><br><br>
-        <button onclick="generateMatrix()">Draw</button>
-      </form>
+    <div class="container-fluid" id="myDiv">
+        <div class="row">
+            <div class="col-md-6">
+                <form id="mainForm">
+                    <div class="form-group">
+                        <label for="x">Board height</label>
+                        <input class="form-control" type="text" id="x"><br><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="y">Board width</label>
+                        <input class="form-control" type="text" id="y"><br><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="colors">Number of colors:</label>
+                        <input class="form-control" type="text" id="colors"><br><br>
+                    </div>
+                    <button class="btn btn-dark" id="submitBtn" value='0' onclick="generateMatrix()">Draw</button>
+                </form>
+            </div>
+            <div class="col-md-6" id="matrix"></div>
+        </div>
+    </div>
 </body>
 <script>
     const generateMatrix = () => {
-        const x        = document.getElementById('x').value;
-        const y        = document.getElementById('y').value;
-        const colors   = document.getElementById('colors').value;
-        let colorIndex = 0;
 
-        var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+        const matrixHTML = document.getElementById('matrix');
+        const x          = document.getElementById('x').value;
+        const y          = document.getElementById('y').value;
+        const colors     = document.getElementById("colors").value;
+        const btnValue   = document.getElementById('submitBtn').value;
+        let colorIndex   = 0;
+
+        var colorArray = 
+         ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
 		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
 		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
@@ -35,6 +59,25 @@
 		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
 		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
 		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+
+        
+        if(x > 50 || y > 50){
+            alert("Please choose a number smaller than 50 in order to display the board correctly!");
+            return;
+        }
+
+        if(btnValue > 0){
+            matrixHTML.removeChild(matrixHTML.lastChild);
+        }
+
+        if(colors > 49){
+            alert("The number of colors is too large. Pick one between 1 30")
+            return;
+        }
+        if(colors < 0 || x < 0 || y < 0){
+            alert("The values must be positive numbers!");
+            return;
+        }
 
         if(x === '' || y === '' || colors === ''){
             alert("Make sure you added all the values!");
@@ -58,7 +101,8 @@
                 colorIndex = colorIndex + 1;
                 matrix.append(tableRow);
             }
-            document.body.append(matrix);
+            matrixHTML.append(matrix);
+            document.getElementById('submitBtn').setAttribute("value",1);
         }
     }
     document.getElementById("mainForm").addEventListener("click", function(event){
